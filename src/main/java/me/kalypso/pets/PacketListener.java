@@ -37,11 +37,7 @@ public class PacketListener {
                 if (jump) keys.add(ControlKey.JUMP);
                 if (shift) keys.add(ControlKey.SHIFT);
 
-                if (!keys.isEmpty()) fire(keys, event.getPlayer());
-            }
-
-            public void fire(List<ControlKey> keys, Player player) {
-                Bukkit.getScheduler().runTask(Pets.getInstance(), () -> PetListener.onControlKeyTrigger(player, keys));
+                if (!keys.isEmpty()) Bukkit.getScheduler().runTask(Pets.getInstance(), () -> PetListener.onControlKeyTrigger(event.getPlayer(), keys));;
             }
         });
     }

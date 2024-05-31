@@ -80,14 +80,6 @@ public abstract class Frame {
         this.rightRotation = Utils.getInstance().fromEulerAngles(rightRotation.x, rightRotation.y, rightRotation.z);
     }
 
-    private double cosE(double value) {
-        return Math.cos(value / 2);
-    }
-
-    private double sinE(double value) {
-        return Math.sin(value / 2);
-    }
-
     public void updateTransformation() {
         getModel().setTransformation(new Transformation(translation, leftRotation, scale, rightRotation));
     }
@@ -155,12 +147,13 @@ public abstract class Frame {
         interaction.setResponsive(false);
 
         ride = (ArmorStand) world.spawnEntity(spawnPos, EntityType.ARMOR_STAND);
+        ride.setSmall(true);
         ride.setGravity(true);
         ride.setInvisible(true);
         ride.setInvulnerable(true);
 
-        ride.addPassenger(model);
-        model.addPassenger(interaction);
+        ride.addPassenger(interaction);
+        interaction.addPassenger(model);
     }
 
     // HEALTH HANDLING

@@ -69,7 +69,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
                     return false;
                 }
 
-                switch (args[1]) {
+                switch (args[1].toLowerCase()) {
                     case "translation" -> {
                         pet.setTranslation(new Vector3f(x, y, z));
                         p.sendMessage("New translation " + x + " " + y + " " + z);
@@ -86,11 +86,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
                         pet.setRightRotation_EulerAngle(new Vector3f(x, y, z));
                         p.sendMessage("New right rotation " + x + " " + y + " " + z);
                     }
-                    default -> {
-                        pet.updateTransformation();
-                    }
                 }
 
+                pet.updateTransformation();
 
             }
         }

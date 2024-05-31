@@ -61,7 +61,7 @@ public class PetListener implements Listener {
         List<ControlKey> keys = new ArrayList<>();
         keys.add(ControlKey.Q);
 
-        Bukkit.getPluginManager().callEvent(new ControlKeyEvent(keys, p.getUniqueId()));
+        onControlKeyTrigger(p, keys);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -75,7 +75,7 @@ public class PetListener implements Listener {
         List<ControlKey> keys = new ArrayList<>();
         keys.add(ControlKey.CTRL);
 
-        Bukkit.getPluginManager().callEvent(new ControlKeyEvent(keys, p.getUniqueId()));
+        onControlKeyTrigger(p, keys);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -89,7 +89,7 @@ public class PetListener implements Listener {
         List<ControlKey> keys = new ArrayList<>();
         keys.add(ControlKey.E);
 
-        Bukkit.getPluginManager().callEvent(new ControlKeyEvent(keys, p.getUniqueId()));
+        onControlKeyTrigger((Player) p, keys);
     }
 
     @EventHandler
