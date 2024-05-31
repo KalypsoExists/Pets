@@ -50,7 +50,9 @@ public abstract class Frame {
 
     // ITEM DISPLAY
 
-    public void setItemStackModel(ItemStack item) { this.modelItem = item; }
+    public void setItemStackModel(ItemStack item) {
+        this.modelItem = item;
+    }
 
     // TRANSFORMATION HANDLING
 
@@ -71,40 +73,19 @@ public abstract class Frame {
     }
 
     public void setLeftRotation_EulerAngle(Vector3f leftRotation) {
-        this.leftRotation = fromEulerAngles(leftRotation.x, leftRotation.y, leftRotation.z);
+        this.leftRotation = Utils.getInstance().fromEulerAngles(leftRotation.x, leftRotation.y, leftRotation.z);
     }
 
     public void setRightRotation_EulerAngle(Vector3f rightRotation) {
-        this.rightRotation = fromEulerAngles(rightRotation.x, rightRotation.y, rightRotation.z);
-    }
-
-    private Quaternionf fromEulerAngles(double x, double y, double z) {
-
-        x = Math.toRadians(x);
-        y = Math.toRadians(y);
-        z = Math.toRadians(z);
-
-        double cr = Math.cos(x * 0.5);
-        double sr = Math.sin(x * 0.5);
-        double cp = Math.cos(y * 0.5);
-        double sp = Math.sin(y * 0.5);
-        double cy = Math.cos(z * 0.5);
-        double sy = Math.sin(z * 0.5);
-
-        double q0 = cr * cp * cy + sr * sp * sy;
-        double q1 = sr * cp * cy - cr * sp * sy;
-        double q2 = cr * sp * cy + sr * cp * sy;
-        double q3 = cr * cp * sy - sr * sp * cy;
-
-        return new Quaternionf(q1, q2, q3, q0);
-
+        this.rightRotation = Utils.getInstance().fromEulerAngles(rightRotation.x, rightRotation.y, rightRotation.z);
     }
 
     private double cosE(double value) {
-        return Math.cos(value/2);
+        return Math.cos(value / 2);
     }
+
     private double sinE(double value) {
-        return Math.sin(value/2);
+        return Math.sin(value / 2);
     }
 
     public void updateTransformation() {
@@ -193,10 +174,10 @@ public abstract class Frame {
     }
 
     public void setHealth(float health) {
-        if(health > maxHealth) {
+        if (health > maxHealth) {
             currentHealth = maxHealth;
             return;
-        } else if(health < 0) {
+        } else if (health < 0) {
             currentHealth = 0;
             return;
         }
@@ -207,9 +188,9 @@ public abstract class Frame {
         setHealth(currentHealth + amount);
     }
 
-    public void damage(float amount){
+    public void damage(float amount) {
         setHealth(currentHealth - amount);
-        if(currentHealth == 0) kill();
+        if (currentHealth == 0) kill();
     }
 
     public void kill() {

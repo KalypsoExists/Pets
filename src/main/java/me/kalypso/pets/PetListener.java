@@ -29,7 +29,7 @@ public class PetListener implements Listener {
         if (!(e.getRightClicked() instanceof Interaction i)) return;
 
         PetFrame pet = Pets.getInstance().getPet(i.getUniqueId());
-        if(pet==null) return;
+        if (pet == null) return;
 
         pet.mountPassenger(p, false);
         Pets.getInstance().addRiddenPet(p.getUniqueId(), pet);
@@ -50,7 +50,7 @@ public class PetListener implements Listener {
         }*/
     }
 
-    @EventHandler (priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onItemDrop(PlayerDropItemEvent e) {
         Player p = e.getPlayer();
 
@@ -64,7 +64,7 @@ public class PetListener implements Listener {
         Bukkit.getPluginManager().callEvent(new ControlKeyEvent(keys, p.getUniqueId()));
     }
 
-    @EventHandler (priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerSprint(PlayerToggleSprintEvent e) {
         Player p = e.getPlayer();
 
@@ -78,7 +78,7 @@ public class PetListener implements Listener {
         Bukkit.getPluginManager().callEvent(new ControlKeyEvent(keys, p.getUniqueId()));
     }
 
-    @EventHandler (priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerOpenInventory(InventoryOpenEvent e) {
         HumanEntity p = e.getPlayer();
 
@@ -96,9 +96,9 @@ public class PetListener implements Listener {
     public void onPetHit(EntityDamageByEntityEvent e) {
 
         if (!(e.getEntity() instanceof Interaction i)) return;
-        if(!(e.getDamager() instanceof Player p)) return;
+        if (!(e.getDamager() instanceof Player p)) return;
 
-        if(Pets.getInstance().isPet(i.getUniqueId())) {
+        if (Pets.getInstance().isPet(i.getUniqueId())) {
             Pets.getInstance().discardPet(i.getUniqueId());
         }
 
@@ -110,10 +110,10 @@ public class PetListener implements Listener {
         Objects.requireNonNull(Bukkit.getPlayer(e.getPlayerUUID()))
                 .sendActionBar(Component.text(Arrays.toString(e.getKeys().toArray())));
 
-        if(e.getKeys().contains(ControlKey.JUMP)) {
+        if (e.getKeys().contains(ControlKey.JUMP)) {
 
             PetFrame pet = Pets.getInstance().getRiddenPet(e.getPlayerUUID());
-            if(pet == null) return;
+            if (pet == null) return;
 
             ArmorStand ride = pet.getRide();
 
@@ -123,26 +123,26 @@ public class PetListener implements Listener {
 
     }
 
-    @EventHandler (priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPetMount(EntityDismountEvent e) {
 
-        if(!(e.getDismounted() instanceof Interaction i)) return;
-        if(!(e.getEntity() instanceof Player p)) return;
+        if (!(e.getDismounted() instanceof Interaction i)) return;
+        if (!(e.getEntity() instanceof Player p)) return;
 
         PetFrame pet = Pets.getInstance().getPet(i.getUniqueId());
-        if(pet==null) return;
+        if (pet == null) return;
 
-        if(pet.isMounted()) e.setCancelled(true);
+        if (pet.isMounted()) e.setCancelled(true);
 
     }
 
-    @EventHandler (priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerDeath(PlayerDeathEvent e) {
 
         Player p = e.getPlayer();
 
         PetFrame pet = Pets.getInstance().getRiddenPet(p.getUniqueId());
-        if(pet != null) pet.dismountPassenger();
+        if (pet != null) pet.dismountPassenger();
 
     }
 }

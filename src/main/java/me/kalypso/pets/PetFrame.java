@@ -23,8 +23,8 @@ public class PetFrame extends Frame {
 
     public void mountPassenger(Player passenger, boolean force) {
 
-        if(!getInteraction().getPassengers().isEmpty()){
-            if(!force) return;
+        if (!getInteraction().getPassengers().isEmpty()) {
+            if (!force) return;
             emptyPassengers();
         }
 
@@ -40,7 +40,7 @@ public class PetFrame extends Frame {
 
     private void emptyPassengers() {
 
-        for(Entity e : getInteraction().getPassengers())
+        for (Entity e : getInteraction().getPassengers())
             getInteraction().removePassenger(e);
 
         mounted = false;
@@ -49,8 +49,8 @@ public class PetFrame extends Frame {
 
     public Entity getMountedPassenger() {
 
-        for(Entity e : getInteraction().getPassengers()) {
-            if(e instanceof Player) {
+        for (Entity e : getInteraction().getPassengers()) {
+            if (e instanceof Player) {
                 return (Player) e;
             }
         }
