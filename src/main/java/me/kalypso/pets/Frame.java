@@ -152,8 +152,8 @@ public abstract class Frame {
         ride.setInvisible(true);
         ride.setInvulnerable(true);
 
-        ride.addPassenger(interaction);
-        interaction.addPassenger(model);
+        ride.addPassenger(model);
+        model.addPassenger(interaction);
     }
 
     // HEALTH HANDLING
@@ -189,6 +189,7 @@ public abstract class Frame {
     public void kill() {
         interaction.remove();
         model.remove();
+        ride.remove();
         isAlive = false;
     }
 

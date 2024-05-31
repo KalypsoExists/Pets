@@ -2,10 +2,8 @@ package me.kalypso.pets;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Interaction;
-import org.bukkit.entity.Player;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -56,12 +54,12 @@ public class PetListener implements Listener {
 
         if (Pets.getInstance().isRidingPet(p.getUniqueId())) return;
 
-        e.setCancelled(true);
-
         List<ControlKey> keys = new ArrayList<>();
         keys.add(ControlKey.Q);
 
         onControlKeyTrigger(p, keys);
+
+        e.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -70,12 +68,12 @@ public class PetListener implements Listener {
 
         if (Pets.getInstance().isRidingPet(p.getUniqueId())) return;
 
-        e.setCancelled(true);
-
         List<ControlKey> keys = new ArrayList<>();
         keys.add(ControlKey.CTRL);
 
         onControlKeyTrigger(p, keys);
+
+        e.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -84,12 +82,12 @@ public class PetListener implements Listener {
 
         if (Pets.getInstance().isRidingPet(p.getUniqueId())) return;
 
-        e.setCancelled(true);
-
         List<ControlKey> keys = new ArrayList<>();
         keys.add(ControlKey.E);
 
         onControlKeyTrigger((Player) p, keys);
+
+        e.setCancelled(true);
     }
 
     @EventHandler
@@ -131,7 +129,7 @@ public class PetListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onPetMount(EntityDismountEvent e) {
+    public void onPetDismount(EntityDismountEvent e) {
 
         if (!(e.getDismounted() instanceof Interaction i)) return;
         if (!(e.getEntity() instanceof Player p)) return;

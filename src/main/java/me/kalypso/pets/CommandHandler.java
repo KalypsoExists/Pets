@@ -1,5 +1,6 @@
 package me.kalypso.pets;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,6 +9,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.StringUtil;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -51,8 +53,9 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
                 PetFrame pet = Pets.getInstance().getRiddenPet(p.getUniqueId());
                 if (pet == null) return false;
 
-                pet.dismountPassenger();
                 Pets.getInstance().removeRiddenPet(p.getUniqueId());
+                pet.dismountPassenger();
+
 
             } else if (args[0].equals("edit")) {
 

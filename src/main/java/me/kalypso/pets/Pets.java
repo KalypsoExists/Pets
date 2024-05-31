@@ -36,8 +36,11 @@ public final class Pets extends JavaPlugin {
     public void onEnable() {
         instance = this;
         protocolManager = ProtocolLibrary.getProtocolManager();
+
         getCommand("pets").setExecutor(new CommandHandler());
         getServer().getPluginManager().registerEvents(new PetListener(), this);
+
+        new Utils();
         new PacketListener();
     }
 

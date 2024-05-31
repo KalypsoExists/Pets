@@ -40,10 +40,10 @@ public class PetFrame extends Frame {
 
     private void emptyPassengers() {
 
+        mounted = false;
+
         for (Entity e : getInteraction().getPassengers())
             getInteraction().removePassenger(e);
-
-        mounted = false;
 
     }
 
