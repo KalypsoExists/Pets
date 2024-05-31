@@ -6,6 +6,7 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,6 @@ public class PacketListener {
                 float ad = packet.getFloat().read(0);
                 boolean jump = packet.getBooleans().read(0);
                 boolean shift = packet.getBooleans().read(1);
-                UUID id = event.getPlayer().getUniqueId();
 
                 ArrayList<ControlKey> keys = new ArrayList<>();
 
@@ -37,11 +37,11 @@ public class PacketListener {
                 if (jump) keys.add(ControlKey.JUMP);
                 if (shift) keys.add(ControlKey.SHIFT);
 
-                if (!keys.isEmpty()) fire(keys, id);
+                if (!keys.isEmpty()) fire(keys, event.getPlayer());
             }
 
-            public void fire(List<ControlKey> keys, UUID id) {
-                Bukkit.getScheduler().runTask(Pets.getInstance(), () -> Bukkit.getPluginManager().callEvent(new ControlKeyEvent(keys, id)));
+            public void fire(List<ControlKey> keys, Player player) {
+                Bukkit.getScheduler().runTask(Pets.getInstance(), () -> PetListener.onControlKeyTrigger(player, keys));
             }
         });
     }

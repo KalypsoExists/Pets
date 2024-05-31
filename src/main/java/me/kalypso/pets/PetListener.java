@@ -104,20 +104,27 @@ public class PetListener implements Listener {
 
     }
 
-    @EventHandler
-    public void onControlKeyTrigger(ControlKeyEvent e) {
+    public static void onControlKeyTrigger(Player player, List<ControlKey> keys) {
 
-        Objects.requireNonNull(Bukkit.getPlayer(e.getPlayerUUID()))
-                .sendActionBar(Component.text(Arrays.toString(e.getKeys().toArray())));
+        player.sendActionBar(Component.text(Arrays.toString(keys.toArray())));
 
-        if (e.getKeys().contains(ControlKey.JUMP)) {
+        if (keys.contains(ControlKey.JUMP)) {
 
-            PetFrame pet = Pets.getInstance().getRiddenPet(e.getPlayerUUID());
+            PetFrame pet = Pets.getInstance().getRiddenPet(player.getUniqueId());
             if (pet == null) return;
 
             ArmorStand ride = pet.getRide();
 
-            ride.setVelocity(ride.getVelocity().add(new Vector(0, 3, 0)));
+            ride.setVelocity(ride.getVelocity().add(new Vector(0, 1, 0)));
+
+        } else if (keys.contains(ControlKey.SHIFT)) {
+
+            PetFrame pet = Pets.getInstance().getRiddenPet(player.getUniqueId());
+            if (pet == null) return;
+
+            ArmorStand ride = pet.getRide();
+
+            ride.setVelocity(ride.getVelocity().add(new Vector(0, -1, 0)));
 
         }
 
