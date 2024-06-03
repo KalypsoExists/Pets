@@ -12,8 +12,8 @@ public class RollsRoyce {
 
     public RollsRoyce() {
         List<Gear> gears = new ArrayList<>();
-        gears.add(new Gear(1, false));
-        gears.add(new Gear(1, true));
+        gears.add(new Gear(1));
+        gears.add(new Gear(-1));
 
         Car.Builder rollsRoyce = new Car.Builder("1949 Rolls-Royce Dawn Drophead", new Frame())
                 .addBodyPart(new Frame())

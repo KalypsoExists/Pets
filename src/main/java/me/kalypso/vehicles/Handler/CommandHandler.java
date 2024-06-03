@@ -27,7 +27,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
     List<String> editSubOptions = new ArrayList<>();
     List<String> editTransformationOptions = new ArrayList<>();
 
-    CommandHandler() {
+    public CommandHandler() {
         options.add("spawn");
         options.add("dismount");
         options.add("edit");

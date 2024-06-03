@@ -23,7 +23,6 @@ public final class Core extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new KeyListener(), this);
         getServer().getPluginManager().registerEvents(new SeatListener(), this);
 
-        new Utils();
         new RollsRoyce();
 
     }

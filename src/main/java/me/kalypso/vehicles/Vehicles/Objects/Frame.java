@@ -92,11 +92,11 @@ public class Frame implements Intractable {
     }
 
     public void setLeftRotation_EulerAngle(Vector3f leftRotation) {
-        this.leftRotation = Utils.getInstance().fromEulerAngles(leftRotation.x, leftRotation.y, leftRotation.z);
+        this.leftRotation = Utils.fromEulerAngles(leftRotation.x, leftRotation.y, leftRotation.z);
     }
 
     public void setRightRotation_EulerAngle(Vector3f rightRotation) {
-        this.rightRotation = Utils.getInstance().fromEulerAngles(rightRotation.x, rightRotation.y, rightRotation.z);
+        this.rightRotation = Utils.fromEulerAngles(rightRotation.x, rightRotation.y, rightRotation.z);
     }
 
     public void updateTransformation() {

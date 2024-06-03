@@ -45,10 +45,10 @@ public class KeyListener implements Listener {
 
                 ArrayList<ControlKey> keys = new ArrayList<>();
 
-                if (ws > 0) keys.add(ControlKey.W);
-                if (ws < 0) keys.add(ControlKey.S);
-                if (ad < 0) keys.add(ControlKey.D);
-                if (ad > 0) keys.add(ControlKey.A);
+                if (ws > 0) keys.add(ControlKey.FORWARD);
+                if (ws < 0) keys.add(ControlKey.BACKWARD);
+                if (ad < 0) keys.add(ControlKey.RIGHT);
+                if (ad > 0) keys.add(ControlKey.LEFT);
                 if (jump) keys.add(ControlKey.JUMP);
                 if (shift) keys.add(ControlKey.SHIFT);
 

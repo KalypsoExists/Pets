@@ -3,17 +3,8 @@ package me.kalypso.vehicles;
 import org.joml.Quaternionf;
 
 public class Utils {
-    private static Utils instance;
 
-    public Utils() {
-         instance = this;
-    }
-
-    public static Utils getInstance() {
-        return instance;
-    }
-
-    public float[] stringToFloatArray(String[] array) {
+    /*public static float[] stringToFloatArray(String[] array) {
         float[] floatArray = new float[array.length];
 
         try {
@@ -26,9 +17,9 @@ public class Utils {
         }
 
         return floatArray;
-    }
+    }*/
 
-    public Quaternionf fromEulerAngles(double x, double y, double z) {
+    public static Quaternionf fromEulerAngles(double x, double y, double z) {
 
         x = Math.toRadians(x);
         y = Math.toRadians(y);
