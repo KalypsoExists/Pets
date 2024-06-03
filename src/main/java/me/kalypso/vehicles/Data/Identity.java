@@ -1,4 +1,4 @@
-package me.kalypso.pets;
+package me.kalypso.vehicles.Data;
 
 import java.util.UUID;
 

@@ -1,51 +1,70 @@
-package me.kalypso.pets;
+package me.kalypso.vehicles.Vehicles.Objects;
 
+import me.kalypso.vehicles.Utils;
+import me.kalypso.vehicles.Handler.VehiclesHandler;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Transformation;
-import org.joml.AxisAngle4f;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-public abstract class Frame {
+public class Frame implements Intractable {
 
     private ItemDisplay model;
+    private Interaction interaction;
+    private ArmorStand ride;
 
     private ItemStack modelItem;
 
-    private Interaction interaction;
-
-    private ArmorStand ride;
-
     private Vector3f translation;
-
-    private Vector3f scale;
-
     private Quaternionf leftRotation;
-
+    private Vector3f scale;
     private Quaternionf rightRotation;
 
     private float interactionWidth;
-
     private float interactionHeight;
 
-    private float currentHealth;
-
+    /*private float currentHealth;
     private final float maxHealth;
+    private boolean isAlive;*/
 
-    private boolean isAlive;
+    public Frame(@NotNull Vector3f translation, @NotNull Vector3f scale, @NotNull Quaternionf leftRotation, @NotNull Quaternionf rightRotation, float interactionWidth, float interactionHeight) {
 
-    public Frame(Vector3f translation, Vector3f scale, Quaternionf leftRotation, Quaternionf rightRotation, float interactionWidth, float interactionHeight, float maxHealth) {
-        this.maxHealth = maxHealth;
         this.translation = translation;
         this.scale = scale;
         this.leftRotation = leftRotation;
         this.rightRotation = rightRotation;
         this.interactionWidth = interactionWidth;
         this.interactionHeight = interactionHeight;
-        isAlive = true;
+
+        VehiclesHandler.getInstance().addAliveFrame(this);
+
+    }
+
+    public Frame() {
+
+        this.translation = new Vector3f(0, 0, 0);
+        this.scale = new Vector3f(0, 0, 0);
+        this.leftRotation = new Quaternionf(0, 0, 0, 1);
+        this.rightRotation = new Quaternionf(0, 0, 0, 1);
+        this.interactionWidth = 1;
+        this.interactionHeight = 1;
+
+        VehiclesHandler.getInstance().addAliveFrame(this);
+
+    }
+
+    // INTERACTION HANDLING
+
+    @Override
+    public void onRightClick(Player player) {
+    }
+
+    @Override
+    public void onLeftClick(Player player) {
     }
 
     // ITEM DISPLAY
@@ -158,7 +177,7 @@ public abstract class Frame {
 
     // HEALTH HANDLING
 
-    public float getCurrentHealth() {
+    /*public float getCurrentHealth() {
         return currentHealth;
     }
 
@@ -199,6 +218,6 @@ public abstract class Frame {
 
     public void repair() {
         currentHealth = maxHealth;
-    }
+    }*/
 
 }

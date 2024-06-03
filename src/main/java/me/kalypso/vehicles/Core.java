@@ -1,55 +1,37 @@
-package me.kalypso.pets;
+package me.kalypso.vehicles;
 
-import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import me.kalypso.vehicles.Handler.CommandHandler;
+import me.kalypso.vehicles.Listeners.KeyListener;
+import me.kalypso.vehicles.Listeners.SeatListener;
+import me.kalypso.vehicles.Vehicles.RollsRoyce;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.StringUtil;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
-import java.lang.reflect.Array;
-import java.util.*;
+public final class Core extends JavaPlugin {
 
-public final class Pets extends JavaPlugin {
-
-    private static Pets instance;
+    private static Core instance;
     private ProtocolManager protocolManager;
-    private final Map<UUID, PetFrame> runTimePets = new HashMap<>(); // Interaction UUID, Pet
-    private final Map<UUID, PetFrame> riddenPets = new HashMap<>(); // Player UUID, Pet
 
     @Override
     public void onEnable() {
+
         instance = this;
         protocolManager = ProtocolLibrary.getProtocolManager();
 
-        getCommand("pets").setExecutor(new CommandHandler());
-        getServer().getPluginManager().registerEvents(new PetListener(), this);
+        getCommand("vehicle").setExecutor(new CommandHandler());
+        getServer().getPluginManager().registerEvents(new KeyListener(), this);
+        getServer().getPluginManager().registerEvents(new SeatListener(), this);
 
         new Utils();
-        new PacketListener();
+        new RollsRoyce();
+
     }
 
     @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-    }
+    public void onDisable() {}
 
-    public static Pets getInstance() {
+    public static Core getInstance() {
         return instance;
     }
 
@@ -57,7 +39,9 @@ public final class Pets extends JavaPlugin {
         return protocolManager;
     }
 
-    public boolean isPet(UUID interaction) {
+
+
+    /*public boolean isPet(UUID interaction) {
         return runTimePets.get(interaction) != null;
     }
 
@@ -90,7 +74,7 @@ public final class Pets extends JavaPlugin {
         pet.kill();
         if (pet.isMounted()) removeRiddenPet(pet.getMountedPassenger().getUniqueId());
         runTimePets.remove(interaction);
-    }
+    }*/
 
 
 }

@@ -1,4 +1,4 @@
-package me.kalypso.pets;
+package me.kalypso.vehicles;
 
 import org.joml.Quaternionf;
 
