@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-public class Frame implements Intractable {
+public class Frame implements Interactable {
 
     private ItemDisplay model;
     private Interaction interaction;

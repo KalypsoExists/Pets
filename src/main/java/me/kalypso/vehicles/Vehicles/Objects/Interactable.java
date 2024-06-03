@@ -2,7 +2,7 @@ package me.kalypso.vehicles.Vehicles.Objects;
 
 import org.bukkit.entity.Player;
 
-public interface Intractable {
+public interface Interactable {
 
     void onRightClick(Player player);
 

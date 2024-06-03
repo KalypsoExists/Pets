@@ -6,7 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class Seat implements Intractable {
+public class Seat implements Interactable {
 
     private final Frame frame;
     private final boolean driverSeat;
