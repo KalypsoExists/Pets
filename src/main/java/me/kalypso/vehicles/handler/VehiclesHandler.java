@@ -1,7 +1,7 @@
-package me.kalypso.vehicles.Handler;
+package me.kalypso.vehicles.handler;
 
 import me.kalypso.vehicles.Core;
-import me.kalypso.vehicles.Vehicles.Vehicle;
+import me.kalypso.vehicles.vehicles.Vehicle;
 import org.bukkit.NamespacedKey;
 
 import java.util.HashMap;

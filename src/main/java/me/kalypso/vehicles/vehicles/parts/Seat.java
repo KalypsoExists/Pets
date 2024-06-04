@@ -1,8 +1,9 @@
-package me.kalypso.vehicles.Vehicles.Parts;
+package me.kalypso.vehicles.vehicles.parts;
 
+import lombok.Getter;
 import me.kalypso.vehicles.Core;
-import me.kalypso.vehicles.Handler.InteractionHandler;
-import me.kalypso.vehicles.Vehicles.Objects.Interactable;
+import me.kalypso.vehicles.handler.InteractionHandler;
+import me.kalypso.vehicles.vehicles.objects.Interactable;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Interaction;
@@ -16,32 +17,36 @@ import org.jetbrains.annotations.NotNull;
 
 public class Seat extends Frame implements Interactable, Listener {
 
+    private final Core core;
     private final boolean driverSeat;
 
-    public Seat(@NotNull String name, @NotNull Frame frame) {
-        super(name, frame);
+    public Seat(@NotNull Core core, @NotNull String name, @NotNull Frame frame) {
+        super(core, name, frame);
 
+        this.core = core;
         driverSeat = false;
 
         //i.getPersistentDataContainer().set(VehiclesHandler.key, PersistentDataType.STRING, getVehicle().getId().toString());
 
-        Core.registerEvent(this);
+        core.registerEvent(this);
         InteractionHandler.registerInteractable(getInteraction().getUniqueId(), this);
     }
 
-    public Seat(@NotNull String name, @NotNull Frame frame, boolean driverSeat) {
-        super(name, frame);
+    public Seat(@NotNull Core core, @NotNull String name, @NotNull Frame frame, boolean driverSeat) {
+        super(core, name, frame);
 
+        this.core = core;
         this.driverSeat = driverSeat;
 
         //i.getPersistentDataContainer().set(VehiclesHandler.key, PersistentDataType.STRING, getVehicle().getId().toString());
 
-        Core.registerEvent(this);
+        core.registerEvent(this);
         InteractionHandler.registerInteractable(getInteraction().getUniqueId(), this);
     }
 
     // PASSENGER HANDLING
 
+    @Getter
     private boolean mounted = false;
 
     @Override
@@ -51,10 +56,6 @@ public class Seat extends Frame implements Interactable, Listener {
 
     @Override
     public void onLeftClick(Player player) {}
-
-    public boolean isMounted() {
-        return mounted;
-    }
 
     public void mountPassenger(Player passenger) {
 

@@ -1,4 +1,4 @@
-package me.kalypso.vehicles.Listeners;
+package me.kalypso.vehicles.listeners;
 
 import org.bukkit.event.Listener;
 

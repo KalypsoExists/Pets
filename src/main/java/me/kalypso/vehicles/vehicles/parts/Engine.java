@@ -1,28 +1,28 @@
-package me.kalypso.vehicles.Vehicles.Parts;
+package me.kalypso.vehicles.vehicles.parts;
 
-import me.kalypso.vehicles.Handler.InteractionHandler;
-import me.kalypso.vehicles.Vehicles.Objects.Interactable;
-import me.kalypso.vehicles.Vehicles.Vehicle;
+import lombok.Getter;
+import me.kalypso.vehicles.Core;
+import me.kalypso.vehicles.handler.InteractionHandler;
+import me.kalypso.vehicles.vehicles.objects.Interactable;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class Engine extends Frame implements Interactable {
 
+    private final Core core;
+    @Getter
     private final GearBox gearBox;
 
-    public Engine(String name, @NotNull Frame frame, @NotNull GearBox gearBox) {
-        super(frame);
+    public Engine(Core core, String name, @NotNull Frame frame, @NotNull GearBox gearBox) {
+        super(core, name, frame);
 
+        this.core = core;
         this.gearBox = gearBox;
 
         //i.getPersistentDataContainer().set(VehiclesHandler.key, PersistentDataType.STRING, getVehicle().getId().toString());
         //Core.registerEvent(this);
 
         InteractionHandler.registerInteractable(getInteraction().getUniqueId(), this);
-    }
-
-    public GearBox getGearBox() {
-        return gearBox;
     }
 
     @Override

@@ -1,9 +1,9 @@
-package me.kalypso.vehicles.Handler;
+package me.kalypso.vehicles.handler;
 
-import me.kalypso.vehicles.Vehicles.Parts.Frame;
-import me.kalypso.vehicles.Vehicles.Parts.Seat;
-import me.kalypso.vehicles.Vehicles.RollsRoyce;
-import me.kalypso.vehicles.Vehicles.Vehicle;
+import me.kalypso.vehicles.vehicles.parts.Frame;
+import me.kalypso.vehicles.vehicles.parts.Seat;
+import me.kalypso.vehicles.vehicles.RollsRoyce;
+import me.kalypso.vehicles.vehicles.Vehicle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

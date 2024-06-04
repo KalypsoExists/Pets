@@ -1,4 +1,4 @@
-package me.kalypso.vehicles.Vehicles.Objects;
+package me.kalypso.vehicles.vehicles.objects;
 
 import org.bukkit.entity.Player;
 

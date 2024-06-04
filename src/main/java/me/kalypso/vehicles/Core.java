@@ -2,14 +2,17 @@ package me.kalypso.vehicles;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import me.kalypso.vehicles.Handler.CommandHandler;
-import me.kalypso.vehicles.Vehicles.RollsRoyce;
+import lombok.Getter;
+import me.kalypso.vehicles.handler.CommandHandler;
+import me.kalypso.vehicles.vehicles.RollsRoyce;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Core extends JavaPlugin {
 
+    @Getter
     private static Core instance;
+    @Getter
     private ProtocolManager protocolManager;
 
     @Override
@@ -20,61 +23,15 @@ public final class Core extends JavaPlugin {
 
         getCommand("vehicle").setExecutor(new CommandHandler());
 
-        new RollsRoyce();
+        new RollsRoyce(this);
 
     }
 
-    public static void registerEvent(Listener l) {
-        getInstance().getServer().getPluginManager().registerEvents(l, getInstance());
+    public void registerEvent(Listener l) {
+        getServer().getPluginManager().registerEvents(l, this);
     }
 
     @Override
     public void onDisable() {}
-
-    public static Core getInstance() {
-        return instance;
-    }
-
-    public ProtocolManager getProtocolManager() {
-        return protocolManager;
-    }
-
-
-
-    /*public boolean isPet(UUID interaction) {
-        return runTimePets.get(interaction) != null;
-    }
-
-    public boolean isRidingPet(UUID player) {
-        return riddenPets.get(player) != null;
-    }
-
-    public PetFrame getPet(UUID interaction) {
-        return runTimePets.get(interaction);
-    }
-
-    public PetFrame getRiddenPet(UUID player) {
-        return riddenPets.get(player);
-    }
-
-    public void addRunTimePet(UUID interaction, PetFrame pet) {
-        runTimePets.put(interaction, pet);
-    }
-
-    public void addRiddenPet(UUID player, PetFrame pet) {
-        riddenPets.put(player, pet);
-    }
-
-    public void removeRiddenPet(UUID player) {
-        riddenPets.remove(player);
-    }
-
-    public void discardPet(UUID interaction) {
-        PetFrame pet = getPet(interaction);
-        pet.kill();
-        if (pet.isMounted()) removeRiddenPet(pet.getMountedPassenger().getUniqueId());
-        runTimePets.remove(interaction);
-    }*/
-
 
 }

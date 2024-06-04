@@ -1,7 +1,7 @@
-package me.kalypso.vehicles.Handler;
+package me.kalypso.vehicles.handler;
 
 import me.kalypso.vehicles.Core;
-import me.kalypso.vehicles.Vehicles.Objects.Interactable;
+import me.kalypso.vehicles.vehicles.objects.Interactable;
 import org.bukkit.Material;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;

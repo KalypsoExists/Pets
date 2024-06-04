@@ -1,9 +1,14 @@
-package me.kalypso.vehicles.Vehicles.Parts;
+package me.kalypso.vehicles.vehicles.parts;
 
-import me.kalypso.vehicles.Vehicles.Objects.Identity;
-import me.kalypso.vehicles.Handler.InteractionHandler;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
+import me.kalypso.vehicles.Core;
+import me.kalypso.vehicles.vehicles.objects.Identity;
+import me.kalypso.vehicles.handler.InteractionHandler;
 import me.kalypso.vehicles.Utils;
-import me.kalypso.vehicles.Vehicles.Objects.Interactable;
+import me.kalypso.vehicles.vehicles.objects.Interactable;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -11,44 +16,52 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
-import me.kalypso.vehicles.Vehicles.Vehicle;
+import me.kalypso.vehicles.vehicles.Vehicle;
 import org.joml.Vector3f;
 
 public class Frame extends Identity implements Interactable {
 
+    private final Core core;
+
+    @Getter
+    @Setter
     private Vehicle vehicle;
 
+    @Getter
     private ItemDisplay model;
+    @Getter
     private Interaction interaction;
+    @Getter
     private ArmorStand ride;
 
     private ItemStack modelItem;
 
-    private Vector3f translation;
-    private Quaternionf leftRotation;
-    private Vector3f scale;
-    private Quaternionf rightRotation;
+    @Getter
+    @Setter
+    private Vector3f translation = new Vector3f(0, 0, 0);
+    @Getter
+    @Setter
+    private Quaternionf leftRotation = new Quaternionf(0, 0, 0, 1);
+    @Getter
+    @Setter
+    private Vector3f scale = new Vector3f(0, 0, 0);
+    @Getter
+    @Setter
+    private Quaternionf rightRotation = new Quaternionf(0, 0, 0, 1);
 
-    private float interactionWidth;
-    private float interactionHeight;
+    @Getter
+    @Setter
+    private float interactionWidth = 1f;
+    @Getter
+    @Setter
+    private float interactionHeight = 1f;
 
     /*private float currentHealth;
     private final float maxHealth;
     private boolean isAlive;*/
 
-    public static Frame defaultFrame() {
-        return new Frame(
-                new Vector3f(0, 0, 0),
-                new Vector3f(0, 0, 0),
-                new Quaternionf(0, 0, 0, 1),
-                new Quaternionf(0, 0, 0, 1),
-                1,
-                1
-        );
-    }
-
-    public Frame(@NotNull Vector3f translation, @NotNull Vector3f scale, @NotNull Quaternionf leftRotation, @NotNull Quaternionf rightRotation, float interactionWidth, float interactionHeight) {
-
+    public Frame(@NotNull Core core, @NotNull String name, @NotNull Vector3f translation, @NotNull Vector3f scale, @NotNull Quaternionf leftRotation, @NotNull Quaternionf rightRotation, float interactionWidth, float interactionHeight) {
+        this.core = core;
         this.translation = translation;
         this.scale = scale;
         this.leftRotation = leftRotation;
@@ -56,43 +69,26 @@ public class Frame extends Identity implements Interactable {
         this.interactionWidth = interactionWidth;
         this.interactionHeight = interactionHeight;
 
-        setupInteraction();
-
-    }
-
-    public Frame(@NotNull Frame frame) {
-
-        this.translation = frame.getTranslation();
-        this.scale = frame.getScale();
-        this.leftRotation = frame.getLeftRotation();
-        this.rightRotation = frame.getRightRotation();
-        this.interactionWidth = frame.getInteractionWidth();
-        this.interactionHeight = frame.getInteractionHeight();
-
-        setupInteraction();
-
-    }
-
-    public Frame(@NotNull String name, @NotNull Frame frame) {
-        new Frame(frame);
-
         setName(name);
         setupInteraction();
 
+    }
+
+    public Frame(@NotNull Core core, @NotNull String name, @NotNull Frame frame) {
+        this(core, name, frame.getTranslation(), frame.getScale(), frame.getLeftRotation(), frame.getRightRotation(), frame.getInteractionWidth(), frame.getInteractionHeight());
+    }
+
+    public Frame(@NotNull Core core, @NotNull String name) {
+        this.core = core;
+
+        setName(name);
+        setupInteraction();
     }
 
     private void setupInteraction() {
         Interaction i = getInteraction();
         //i.getPersistentDataContainer().set(VehiclesHandler.key, PersistentDataType.STRING, getVehicle().getId().toString());
         InteractionHandler.registerInteractable(i.getUniqueId(), this);
-    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
-
-    public Vehicle getVehicle() {
-        return vehicle;
     }
 
     // INTERACTION HANDLING
@@ -113,22 +109,6 @@ public class Frame extends Identity implements Interactable {
 
     // TRANSFORMATION HANDLING
 
-    public void setTranslation(Vector3f translation) {
-        this.translation = translation;
-    }
-
-    public void setScale(Vector3f scale) {
-        this.scale = scale;
-    }
-
-    public void setLeftRotation(Quaternionf leftRotation) {
-        this.leftRotation = leftRotation;
-    }
-
-    public void setRightRotation(Quaternionf rightRotation) {
-        this.rightRotation = rightRotation;
-    }
-
     public void setLeftRotation_EulerAngle(Vector3f leftRotation) {
         this.leftRotation = Utils.fromEulerAngles(leftRotation.x, leftRotation.y, leftRotation.z);
     }
@@ -141,51 +121,7 @@ public class Frame extends Identity implements Interactable {
         getModel().setTransformation(new Transformation(translation, leftRotation, scale, rightRotation));
     }
 
-    public void setInteractionWidth(float interactionWidth) {
-        this.interactionWidth = interactionWidth;
-    }
-
-    public void setInteractionHeight(float interactionHeight) {
-        this.interactionHeight = interactionHeight;
-    }
-
-    public Vector3f getTranslation() {
-        return translation;
-    }
-
-    public Vector3f getScale() {
-        return scale;
-    }
-
-    public Quaternionf getLeftRotation() {
-        return leftRotation;
-    }
-
-    public Quaternionf getRightRotation() {
-        return rightRotation;
-    }
-
-    public float getInteractionHeight() {
-        return interactionHeight;
-    }
-
-    public float getInteractionWidth() {
-        return interactionWidth;
-    }
-
     // ENTITY HANDLING
-
-    public ItemDisplay getModel() {
-        return model;
-    }
-
-    public Interaction getInteraction() {
-        return interaction;
-    }
-
-    public ArmorStand getRide() {
-        return ride;
-    }
 
     public void spawnFrame(World world, Location spawnPos) {
         model = (ItemDisplay) world.spawnEntity(spawnPos, EntityType.ITEM_DISPLAY);
@@ -211,6 +147,64 @@ public class Frame extends Identity implements Interactable {
 
         ride.addPassenger(model);
         model.addPassenger(interaction);
+    }
+
+    public static class Builder {
+
+        private final Core core;
+
+        private String name = "";
+
+        private Vector3f translation = new Vector3f(0, 0, 0);
+        private Vector3f scale = new Vector3f(0, 0, 0);
+        private Quaternionf leftRotation = new Quaternionf(0, 0, 0, 1);
+        private Quaternionf rightRotation = new Quaternionf(0, 0, 0, 1);
+
+        private float interactionHeight = 1f;
+        private float interactionWidth = 1f;
+
+        public Builder(Core core) {
+            this.core = core;
+        }
+
+        public Frame.Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Frame.Builder translate(Vector3f translation) {
+            this.translation = translation;
+            return this;
+        }
+
+        public Frame.Builder scale(Vector3f scale) {
+            this.scale = scale;
+            return this;
+        }
+
+        public Frame.Builder leftRotation(Quaternionf leftRotation) {
+            this.leftRotation = leftRotation;
+            return this;
+        }
+
+        public Frame.Builder rightRotation(Quaternionf rightRotation) {
+            this.rightRotation = rightRotation;
+            return this;
+        }
+
+        public Frame.Builder interactionHeight(float height) {
+            interactionHeight = height;
+            return this;
+        }
+
+        public Frame.Builder interactionWidth(float value) {
+            interactionWidth = value;
+            return this;
+        }
+
+        public Frame build() {
+            return new Frame(core, name, translation, scale, leftRotation, rightRotation, interactionWidth, interactionHeight);
+        }
     }
 
     // HEALTH HANDLING

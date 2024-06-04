@@ -1,4 +1,4 @@
-package me.kalypso.vehicles.Vehicles;
+package me.kalypso.vehicles.vehicles;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -7,15 +7,13 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.google.common.collect.*;
 import me.kalypso.vehicles.Core;
-import me.kalypso.vehicles.Vehicles.Objects.ControlKey;
-import me.kalypso.vehicles.Vehicles.Objects.Identity;
-import me.kalypso.vehicles.Handler.VehiclesHandler;
-import me.kalypso.vehicles.Vehicles.Parts.Frame;
-import me.kalypso.vehicles.Vehicles.Parts.Seat;
+import me.kalypso.vehicles.vehicles.objects.ControlKey;
+import me.kalypso.vehicles.vehicles.objects.Identity;
+import me.kalypso.vehicles.handler.VehiclesHandler;
+import me.kalypso.vehicles.vehicles.parts.Frame;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -26,23 +24,23 @@ import java.util.*;
 
 public abstract class Vehicle extends Identity implements Listener {
 
+    private final Core core;
     private final Frame chassis;
     private final ListMultimap<String, Frame> parts = ArrayListMultimap.create();
     private final List<UUID> drivers = new ArrayList<>();
 
-    public Vehicle(String name, Frame chassis) {
+    public Vehicle(Core core, String name, Frame chassis) {
         setName(name);
 
+        this.core = core;
         this.chassis = chassis;
 
         steerVehiclePacket();
-        Core.registerEvent(this);
-
-        VehiclesHandler.registerVehicle(this);
+        core.registerEvent(this);
     }
 
     private void syncControls(List<ControlKey> keys) {
-        Bukkit.getScheduler().runTask(Core.getInstance(), () -> processControls(keys));
+        Bukkit.getScheduler().runTask(core, () -> processControls(keys));
     }
 
     public abstract void processControls(List<ControlKey> keys);
@@ -74,31 +72,24 @@ public abstract class Vehicle extends Identity implements Listener {
     // Listeners
 
     public void steerVehiclePacket() {
-        Core.getInstance().getProtocolManager().addPacketListener(new PacketAdapter(Core.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Client.STEER_VEHICLE) {
+        core.getProtocolManager().addPacketListener(new PacketAdapter(core, ListenerPriority.NORMAL, PacketType.Play.Client.STEER_VEHICLE) {
             @Override
             public void onPacketReceiving(PacketEvent e) {
                 PacketContainer packet = e.getPacket();
 
-                /*boolean go = false;
-                for(Frame f : parts.get("driver_seat")) {
-                    Seat seat = (Seat) f;
-                    if(seat.getMountedPassenger().getUniqueId().equals(e.getPlayer().getUniqueId())) go=true;
-                }
-                if(!go) return;*/
-
                 if(!drivers.contains(e.getPlayer().getUniqueId())) return;
 
-                float ws = packet.getFloat().read(1);
-                float ad = packet.getFloat().read(0);
+                float forward = packet.getFloat().read(1);
+                float sideward = packet.getFloat().read(0);
                 boolean jump = packet.getBooleans().read(0);
                 boolean shift = packet.getBooleans().read(1);
 
                 ArrayList<ControlKey> keys = new ArrayList<>();
 
-                if (ws > 0) keys.add(ControlKey.FORWARD);
-                if (ws < 0) keys.add(ControlKey.BACKWARD);
-                if (ad < 0) keys.add(ControlKey.RIGHT);
-                if (ad > 0) keys.add(ControlKey.LEFT);
+                if (forward > 0) keys.add(ControlKey.FORWARD);
+                if (forward < 0) keys.add(ControlKey.BACKWARD);
+                if (sideward < 0) keys.add(ControlKey.RIGHT);
+                if (sideward > 0) keys.add(ControlKey.LEFT);
                 if (jump) keys.add(ControlKey.JUMP);
                 if (shift) keys.add(ControlKey.SHIFT);
 
