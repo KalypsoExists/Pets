@@ -3,9 +3,8 @@ package me.kalypso.vehicles;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import me.kalypso.vehicles.Handler.CommandHandler;
-import me.kalypso.vehicles.Listeners.KeyListener;
-import me.kalypso.vehicles.Listeners.SeatListener;
 import me.kalypso.vehicles.Vehicles.RollsRoyce;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Core extends JavaPlugin {
@@ -20,11 +19,13 @@ public final class Core extends JavaPlugin {
         protocolManager = ProtocolLibrary.getProtocolManager();
 
         getCommand("vehicle").setExecutor(new CommandHandler());
-        getServer().getPluginManager().registerEvents(new KeyListener(), this);
-        getServer().getPluginManager().registerEvents(new SeatListener(), this);
 
         new RollsRoyce();
 
+    }
+
+    public static void registerEvent(Listener l) {
+        getInstance().getServer().getPluginManager().registerEvents(l, getInstance());
     }
 
     @Override

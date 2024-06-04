@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class SeatListener implements Listener {
 
-    @EventHandler(priority = EventPriority.HIGH)
+    /*@EventHandler(priority = EventPriority.HIGH)
     public void onPetInteract(PlayerInteractEntityEvent e) {
 
         Player p = e.getPlayer();
@@ -48,5 +48,7 @@ public class SeatListener implements Listener {
         Seat seat = VehiclesHandler.getInstance().getRiddenSeat(p.getUniqueId());
         if (seat != null) seat.dismountPassenger(p);
 
-    }
+    }*/
+
+
 }

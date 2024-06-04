@@ -1,17 +1,20 @@
 package me.kalypso.vehicles.Vehicles.Objects;
 
+import me.kalypso.vehicles.Handler.InteractionHandler;
 import me.kalypso.vehicles.Utils;
 import me.kalypso.vehicles.Handler.VehiclesHandler;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
+import me.kalypso.vehicles.Vehicles.Vehicle;
 import org.joml.Vector3f;
 
-public class Frame implements Interactable {
+public class Frame extends VehiclePart implements Interactable {
 
     private ItemDisplay model;
     private Interaction interaction;
@@ -31,7 +34,9 @@ public class Frame implements Interactable {
     private final float maxHealth;
     private boolean isAlive;*/
 
-    public Frame(@NotNull Vector3f translation, @NotNull Vector3f scale, @NotNull Quaternionf leftRotation, @NotNull Quaternionf rightRotation, float interactionWidth, float interactionHeight) {
+    public Frame(@NotNull Vehicle vehicle, @NotNull Vector3f translation, @NotNull Vector3f scale, @NotNull Quaternionf leftRotation, @NotNull Quaternionf rightRotation, float interactionWidth, float interactionHeight) {
+
+        super(vehicle);
 
         this.translation = translation;
         this.scale = scale;
@@ -40,11 +45,13 @@ public class Frame implements Interactable {
         this.interactionWidth = interactionWidth;
         this.interactionHeight = interactionHeight;
 
-        VehiclesHandler.getInstance().addAliveFrame(this);
+        setupInteraction();
 
     }
 
-    public Frame() {
+    public Frame(@NotNull Vehicle vehicle) {
+
+        super(vehicle);
 
         this.translation = new Vector3f(0, 0, 0);
         this.scale = new Vector3f(0, 0, 0);
@@ -53,8 +60,15 @@ public class Frame implements Interactable {
         this.interactionWidth = 1;
         this.interactionHeight = 1;
 
-        VehiclesHandler.getInstance().addAliveFrame(this);
+        setupInteraction();
 
+    }
+
+    private void setupInteraction() {
+        Interaction i = getInteraction();
+        i.getPersistentDataContainer().set(VehiclesHandler.key, PersistentDataType.STRING, getVehicle().getId().toString());
+
+        InteractionHandler.registerInteractable(i.getUniqueId(), this);
     }
 
     // INTERACTION HANDLING

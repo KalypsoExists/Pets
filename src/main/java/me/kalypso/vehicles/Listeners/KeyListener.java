@@ -23,7 +23,7 @@ import java.util.List;
 
 public class KeyListener implements Listener {
 
-    private boolean Q = false, E = false;
+    /*private boolean Q = false, E = false;
 
     public KeyListener() {
         steerVehiclePacket();
@@ -81,6 +81,6 @@ public class KeyListener implements Listener {
         vehicle.processControls(List.of(ControlKey.E));
 
         e.setCancelled(true);
-    }
+    }*/
 
 }

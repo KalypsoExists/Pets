@@ -1,24 +1,52 @@
 package me.kalypso.vehicles.Vehicles.Objects;
 
+import me.kalypso.vehicles.Core;
+import me.kalypso.vehicles.Handler.InteractionHandler;
 import me.kalypso.vehicles.Handler.VehiclesHandler;
+import me.kalypso.vehicles.Vehicles.Vehicle;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDismountEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-public class Seat implements Interactable {
+public class Seat extends VehiclePart implements Interactable, Listener {
 
     private final Frame frame;
     private final boolean driverSeat;
 
-    public Seat(@NotNull Frame frame, boolean driverSeat) {
+    public Seat(@NotNull Vehicle vehicle, @NotNull Frame frame, boolean driverSeat) {
+        super(vehicle);
+
         this.frame = frame;
         this.driverSeat = driverSeat;
+
+        setupInteraction();
     }
 
-    public Seat(@NotNull Frame frame) {
+    public Seat(@NotNull Vehicle vehicle, @NotNull Frame frame) {
+        super(vehicle);
+
         this.frame = frame;
         driverSeat = false;
+
+        setupInteraction();
+    }
+
+    private void setupInteraction() {
+        Interaction i = frame.getInteraction();
+        i.getPersistentDataContainer().set(VehiclesHandler.key, PersistentDataType.STRING, getVehicle().getId().toString());
+
+        Core.registerEvent(this);
+        InteractionHandler.registerInteractable(i.getUniqueId(), this);
     }
 
     public Frame getFrame() {
@@ -49,7 +77,6 @@ public class Seat implements Interactable {
 
         mounted = true;
         frame.getInteraction().addPassenger(passenger);
-        VehiclesHandler.getInstance().addRiddenSeat(passenger.getUniqueId(), this);
 
     }
 
@@ -90,5 +117,28 @@ public class Seat implements Interactable {
         return null;
 
     }
+
+    // LISTENERS
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerDismount(EntityDismountEvent e) {
+
+        if (!(e.getDismounted() instanceof Interaction i)) return;
+        if (!(e.getEntity() instanceof Player p)) return;
+        if(!i.getUniqueId().equals(getFrame().getInteraction().getUniqueId())) return;
+
+        if (isMounted()) e.setCancelled(true);
+
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerDeath(PlayerDeathEvent e) {
+
+        Player p = e.getPlayer();
+        if(!getMountedPassenger().getUniqueId().equals(p.getUniqueId())) return;
+        dismountPassenger(p);
+
+    }
+
 
 }

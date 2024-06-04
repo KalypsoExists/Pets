@@ -1,8 +1,8 @@
 package me.kalypso.vehicles.Handler;
 
-import me.kalypso.vehicles.Vehicles.Objects.Frame;
-import me.kalypso.vehicles.Vehicles.Objects.Seat;
+import me.kalypso.vehicles.Core;
 import me.kalypso.vehicles.Vehicles.Vehicle;
+import org.bukkit.NamespacedKey;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,24 +10,25 @@ import java.util.UUID;
 
 public class VehiclesHandler {
 
-    private static VehiclesHandler instance;
+    public static final NamespacedKey key = new NamespacedKey(Core.getInstance(), "vehicle");
 
-    private final Map<UUID, Vehicle> aliveVehicles = new HashMap<>();
-    private final Map<UUID, Frame> aliveFrames = new HashMap<>();
-    private final Map<Seat, Vehicle> aliveSeatsVehicle = new HashMap<>();
-    private final Map<UUID, Seat> aliveSeatsInteraction = new HashMap<>();
-    private final Map<UUID, Seat> riddenSeats = new HashMap<>();
+    private static final Map<UUID, Vehicle> vehicles = new HashMap<>();
 
-    public VehiclesHandler() {
-        instance = this;
+    public static void registerVehicle(Vehicle vehicle) {
+        vehicles.put(vehicle.getId(), vehicle);
     }
 
-    public static VehiclesHandler getInstance() {
-        return instance;
+    public static void unregisterVehicle(Vehicle vehicle) {
+        vehicles.remove(vehicle.getId());
     }
+
+    public static void unregisterVehicle(UUID vehicleUUID) {
+        vehicles.remove(vehicleUUID);
+    }
+
     // MAP HANDLING
 
-    public void addAliveVehicle(Vehicle vehicle) {
+    /*public void addAliveVehicle(Vehicle vehicle) {
         aliveVehicles.put(vehicle.getId(), vehicle);
     }
 
@@ -64,6 +65,6 @@ public class VehiclesHandler {
 
     public Seat getSeat(UUID uuid) {
         return aliveSeatsInteraction.get(uuid);
-    }
+    }*/
 
 }
