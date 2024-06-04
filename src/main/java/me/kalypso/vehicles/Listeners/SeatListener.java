@@ -1,15 +1,6 @@
 package me.kalypso.vehicles.Listeners;
 
-import me.kalypso.vehicles.Handler.VehiclesHandler;
-import me.kalypso.vehicles.Vehicles.Objects.Seat;
-import org.bukkit.entity.Interaction;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDismountEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class SeatListener implements Listener {
 

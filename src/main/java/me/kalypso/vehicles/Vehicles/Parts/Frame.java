@@ -1,20 +1,22 @@
-package me.kalypso.vehicles.Vehicles.Objects;
+package me.kalypso.vehicles.Vehicles.Parts;
 
+import me.kalypso.vehicles.Vehicles.Objects.Identity;
 import me.kalypso.vehicles.Handler.InteractionHandler;
 import me.kalypso.vehicles.Utils;
-import me.kalypso.vehicles.Handler.VehiclesHandler;
+import me.kalypso.vehicles.Vehicles.Objects.Interactable;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import me.kalypso.vehicles.Vehicles.Vehicle;
 import org.joml.Vector3f;
 
-public class Frame extends VehiclePart implements Interactable {
+public class Frame extends Identity implements Interactable {
+
+    private Vehicle vehicle;
 
     private ItemDisplay model;
     private Interaction interaction;
@@ -34,9 +36,18 @@ public class Frame extends VehiclePart implements Interactable {
     private final float maxHealth;
     private boolean isAlive;*/
 
-    public Frame(@NotNull Vehicle vehicle, @NotNull Vector3f translation, @NotNull Vector3f scale, @NotNull Quaternionf leftRotation, @NotNull Quaternionf rightRotation, float interactionWidth, float interactionHeight) {
+    public static Frame defaultFrame() {
+        return new Frame(
+                new Vector3f(0, 0, 0),
+                new Vector3f(0, 0, 0),
+                new Quaternionf(0, 0, 0, 1),
+                new Quaternionf(0, 0, 0, 1),
+                1,
+                1
+        );
+    }
 
-        super(vehicle);
+    public Frame(@NotNull Vector3f translation, @NotNull Vector3f scale, @NotNull Quaternionf leftRotation, @NotNull Quaternionf rightRotation, float interactionWidth, float interactionHeight) {
 
         this.translation = translation;
         this.scale = scale;
@@ -49,26 +60,39 @@ public class Frame extends VehiclePart implements Interactable {
 
     }
 
-    public Frame(@NotNull Vehicle vehicle) {
+    public Frame(@NotNull Frame frame) {
 
-        super(vehicle);
+        this.translation = frame.getTranslation();
+        this.scale = frame.getScale();
+        this.leftRotation = frame.getLeftRotation();
+        this.rightRotation = frame.getRightRotation();
+        this.interactionWidth = frame.getInteractionWidth();
+        this.interactionHeight = frame.getInteractionHeight();
 
-        this.translation = new Vector3f(0, 0, 0);
-        this.scale = new Vector3f(0, 0, 0);
-        this.leftRotation = new Quaternionf(0, 0, 0, 1);
-        this.rightRotation = new Quaternionf(0, 0, 0, 1);
-        this.interactionWidth = 1;
-        this.interactionHeight = 1;
+        setupInteraction();
 
+    }
+
+    public Frame(@NotNull String name, @NotNull Frame frame) {
+        new Frame(frame);
+
+        setName(name);
         setupInteraction();
 
     }
 
     private void setupInteraction() {
         Interaction i = getInteraction();
-        i.getPersistentDataContainer().set(VehiclesHandler.key, PersistentDataType.STRING, getVehicle().getId().toString());
-
+        //i.getPersistentDataContainer().set(VehiclesHandler.key, PersistentDataType.STRING, getVehicle().getId().toString());
         InteractionHandler.registerInteractable(i.getUniqueId(), this);
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
     // INTERACTION HANDLING

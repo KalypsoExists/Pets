@@ -5,17 +5,16 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import com.google.common.collect.*;
 import me.kalypso.vehicles.Core;
-import me.kalypso.vehicles.Data.ControlKey;
-import me.kalypso.vehicles.Data.Identity;
+import me.kalypso.vehicles.Vehicles.Objects.ControlKey;
+import me.kalypso.vehicles.Vehicles.Objects.Identity;
 import me.kalypso.vehicles.Handler.VehiclesHandler;
-import me.kalypso.vehicles.Vehicles.Objects.Engine;
-import me.kalypso.vehicles.Vehicles.Objects.Frame;
-import me.kalypso.vehicles.Vehicles.Objects.Seat;
+import me.kalypso.vehicles.Vehicles.Parts.Frame;
+import me.kalypso.vehicles.Vehicles.Parts.Seat;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,31 +22,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public abstract class Vehicle extends Identity implements Listener {
 
     private final Frame chassis;
-    private final List<Frame> bodyParts;
-    private final List<Seat> seats;
-    private final List<Engine> engines;
-    private final List<Frame> allFrames;
+    private final ListMultimap<String, Frame> parts = ArrayListMultimap.create();
+    private final List<UUID> drivers = new ArrayList<>();
 
-    public Vehicle(String name, Frame chassis, List<Seat> seats, List<Engine> engines, List<Frame> bodyParts) {
-        super(name);
+    public Vehicle(String name, Frame chassis) {
+        setName(name);
 
         this.chassis = chassis;
-        this.seats = seats;
-        this.bodyParts = bodyParts;
-        this.engines = engines;
-        this.allFrames = new ArrayList<>();
-
-        for(Seat seat : seats) {
-            allFrames.add(seat.getFrame());
-        }
-        for(Engine engine : engines) allFrames.add(engine.getFrame());;
-        allFrames.addAll(bodyParts);
 
         steerVehiclePacket();
         Core.registerEvent(this);
@@ -62,24 +48,45 @@ public abstract class Vehicle extends Identity implements Listener {
     public abstract void processControls(List<ControlKey> keys);
 
     public void spawn(World world, Location pos) {
-        for(Frame frame : allFrames) frame.spawnFrame(world, pos);
+        parts.values().forEach(frame -> frame.spawnFrame(world, pos));
     }
 
-    public Seat getSeat(int index) {
-        return seats.get(index);
+    public void addPart(String partType, Frame frame) {
+        parts.put(partType, frame);
     }
 
-    public void addFrame(Frame frame) {
-        allFrames.add(frame);
+    public void addAllParts(String partType, Collection<Frame> frames) {
+        parts.putAll(partType, frames);
     }
+
+    public void addMultiParts(ListMultimap<String, Frame> parts) {
+        parts.putAll(parts);
+    }
+
+    public void addDriver(UUID player) {
+        drivers.add(player);
+    }
+
+    public void removeDriver(UUID player) {
+        drivers.add(player);
+    }
+
+    // Listeners
 
     public void steerVehiclePacket() {
         Core.getInstance().getProtocolManager().addPacketListener(new PacketAdapter(Core.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Client.STEER_VEHICLE) {
             @Override
-            public void onPacketReceiving(PacketEvent event) {
-                PacketContainer packet = event.getPacket();
+            public void onPacketReceiving(PacketEvent e) {
+                PacketContainer packet = e.getPacket();
 
-                for(Seat seat : seats) if(!seat.isDriverSeat() || !seat.getMountedPassenger().getUniqueId().equals(event.getPlayer().getUniqueId())) return;
+                /*boolean go = false;
+                for(Frame f : parts.get("driver_seat")) {
+                    Seat seat = (Seat) f;
+                    if(seat.getMountedPassenger().getUniqueId().equals(e.getPlayer().getUniqueId())) go=true;
+                }
+                if(!go) return;*/
+
+                if(!drivers.contains(e.getPlayer().getUniqueId())) return;
 
                 float ws = packet.getFloat().read(1);
                 float ad = packet.getFloat().read(0);
@@ -103,7 +110,8 @@ public abstract class Vehicle extends Identity implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onItemDrop(PlayerDropItemEvent e) {
 
-        for(Seat seat : seats) if(!seat.isDriverSeat() || !seat.getMountedPassenger().getUniqueId().equals(e.getPlayer().getUniqueId())) return;
+        if(!drivers.contains(e.getPlayer().getUniqueId())) return;
+
         syncControls(List.of(ControlKey.Q));
         e.setCancelled(true);
 
@@ -112,7 +120,8 @@ public abstract class Vehicle extends Identity implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerOpenInventory(InventoryOpenEvent e) {
 
-        for(Seat seat : seats) if(!seat.isDriverSeat() || !seat.getMountedPassenger().getUniqueId().equals(e.getPlayer().getUniqueId())) return;
+        if(!drivers.contains(e.getPlayer().getUniqueId())) return;
+
         syncControls(List.of(ControlKey.E));
         e.setCancelled(true);
 

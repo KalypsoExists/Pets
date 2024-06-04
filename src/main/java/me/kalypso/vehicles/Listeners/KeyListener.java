@@ -1,25 +1,6 @@
 package me.kalypso.vehicles.Listeners;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
-import me.kalypso.vehicles.Data.ControlKey;
-import me.kalypso.vehicles.Core;
-import me.kalypso.vehicles.Handler.VehiclesHandler;
-import me.kalypso.vehicles.Vehicles.Vehicle;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class KeyListener implements Listener {
 

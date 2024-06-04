@@ -1,19 +1,17 @@
 package me.kalypso.vehicles.Vehicles;
 
-import me.kalypso.vehicles.Data.ControlKey;
-import me.kalypso.vehicles.Handler.VehiclesHandler;
-import me.kalypso.vehicles.Vehicles.Objects.Engine;
-import me.kalypso.vehicles.Vehicles.Objects.Frame;
-import me.kalypso.vehicles.Vehicles.Objects.GearBox;
-import me.kalypso.vehicles.Vehicles.Objects.Seat;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
+import me.kalypso.vehicles.Vehicles.Objects.ControlKey;
+import me.kalypso.vehicles.Vehicles.Parts.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Car extends Vehicle {
 
-    public Car(String name, Frame chassis, List<Seat> seats, List<Engine> engines, List<Frame> bodyParts) {
-        super(name, chassis, seats, engines, bodyParts);
+    public Car(String name, Frame chassis) {
+        super(name, chassis);
     }
 
     @Override
@@ -26,32 +24,37 @@ public class Car extends Vehicle {
         private final Frame chassis;
         private final String name;
 
-        private final List<Frame> bodyParts = new ArrayList<>();
-        private final List<Seat> seats = new ArrayList<>();
-        private final List<Engine> engines = new ArrayList<>();
+        private final ListMultimap<String, Frame> parts = ArrayListMultimap.create();
 
         public Builder(String name, Frame chassis) {
             this.name = name;
             this.chassis = chassis;
         }
 
-        public Car.Builder addSeat(Frame frame, boolean driverSeat) {
-            seats.add(new Seat(frame, driverSeat));
+        public Car.Builder addSeat(String name, Frame frame) {
+            parts.put("seat", new Seat(name, frame));
             return this;
         }
 
-        public Car.Builder addEngine(Frame frame, GearBox gearBox) {
-            engines.add(new Engine(frame, gearBox));
+        public Car.Builder addDriverSeat(String name, Frame frame) {
+            parts.put("driver_seat", new Seat(name, frame, true));
             return this;
         }
 
-        public Car.Builder addBodyPart(Frame frame) {
-            bodyParts.add(frame);
+        public Car.Builder addEngine(String name, Frame frame, GearBox gearBox) {
+            parts.put("engine", new Engine(name, frame, gearBox));
+            return this;
+        }
+
+        public Car.Builder addBodyPart(String name, Frame frame) {
+            parts.put("body", new Frame(name, frame));
             return this;
         }
 
         public Car get() {
-            return new Car(name, chassis, seats, engines, bodyParts);
+            Car car = new Car(name, chassis);
+            car.addMultiParts(parts);
+            return car;
         }
 
     }

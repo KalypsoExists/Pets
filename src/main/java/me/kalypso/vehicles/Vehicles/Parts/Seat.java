@@ -1,10 +1,8 @@
-package me.kalypso.vehicles.Vehicles.Objects;
+package me.kalypso.vehicles.Vehicles.Parts;
 
 import me.kalypso.vehicles.Core;
 import me.kalypso.vehicles.Handler.InteractionHandler;
-import me.kalypso.vehicles.Handler.VehiclesHandler;
-import me.kalypso.vehicles.Vehicles.Vehicle;
-import org.bukkit.NamespacedKey;
+import me.kalypso.vehicles.Vehicles.Objects.Interactable;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Interaction;
@@ -14,43 +12,32 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDismountEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-public class Seat extends VehiclePart implements Interactable, Listener {
+public class Seat extends Frame implements Interactable, Listener {
 
-    private final Frame frame;
     private final boolean driverSeat;
 
-    public Seat(@NotNull Vehicle vehicle, @NotNull Frame frame, boolean driverSeat) {
-        super(vehicle);
+    public Seat(@NotNull String name, @NotNull Frame frame) {
+        super(name, frame);
 
-        this.frame = frame;
-        this.driverSeat = driverSeat;
-
-        setupInteraction();
-    }
-
-    public Seat(@NotNull Vehicle vehicle, @NotNull Frame frame) {
-        super(vehicle);
-
-        this.frame = frame;
         driverSeat = false;
 
-        setupInteraction();
-    }
-
-    private void setupInteraction() {
-        Interaction i = frame.getInteraction();
-        i.getPersistentDataContainer().set(VehiclesHandler.key, PersistentDataType.STRING, getVehicle().getId().toString());
+        //i.getPersistentDataContainer().set(VehiclesHandler.key, PersistentDataType.STRING, getVehicle().getId().toString());
 
         Core.registerEvent(this);
-        InteractionHandler.registerInteractable(i.getUniqueId(), this);
+        InteractionHandler.registerInteractable(getInteraction().getUniqueId(), this);
     }
 
-    public Frame getFrame() {
-        return frame;
+    public Seat(@NotNull String name, @NotNull Frame frame, boolean driverSeat) {
+        super(name, frame);
+
+        this.driverSeat = driverSeat;
+
+        //i.getPersistentDataContainer().set(VehiclesHandler.key, PersistentDataType.STRING, getVehicle().getId().toString());
+
+        Core.registerEvent(this);
+        InteractionHandler.registerInteractable(getInteraction().getUniqueId(), this);
     }
 
     // PASSENGER HANDLING
@@ -69,14 +56,12 @@ public class Seat extends VehiclePart implements Interactable, Listener {
         return mounted;
     }
 
-    public boolean isDriverSeat() {
-        return driverSeat;
-    }
-
     public void mountPassenger(Player passenger) {
 
         mounted = true;
-        frame.getInteraction().addPassenger(passenger);
+        getInteraction().addPassenger(passenger);
+
+        if(driverSeat) getVehicle().addDriver(passenger.getUniqueId());
 
     }
 
@@ -84,15 +69,16 @@ public class Seat extends VehiclePart implements Interactable, Listener {
 
         Entity entity = null;
 
-        for (Entity e : frame.getInteraction().getPassengers())
+        for (Entity e : getInteraction().getPassengers())
             if(e instanceof Player p)
                 if(p.getUniqueId().equals(player.getUniqueId()))  {
                     entity = e;
                 }
 
         if(entity != null) {
-            if(frame.getInteraction().getPassengers().isEmpty()) mounted = false;
-            frame.getInteraction().removePassenger(entity);
+            if(getInteraction().getPassengers().isEmpty()) mounted = false;
+            getInteraction().removePassenger(entity);
+            if(driverSeat) getVehicle().removeDriver(player.getUniqueId());
         }
 
     }
@@ -101,14 +87,16 @@ public class Seat extends VehiclePart implements Interactable, Listener {
 
         mounted = false;
 
-        for (Entity e : frame.getInteraction().getPassengers())
-            frame.getInteraction().removePassenger(e);
+        for (Entity e : getInteraction().getPassengers()) {
+            getInteraction().removePassenger(e);
+            if(driverSeat) getVehicle().removeDriver(e.getUniqueId());
+        }
 
     }
 
     public Entity getMountedPassenger() {
 
-        for (Entity e : frame.getInteraction().getPassengers()) {
+        for (Entity e : getInteraction().getPassengers()) {
             if (e instanceof Player) {
                 return (Player) e;
             }
@@ -125,7 +113,7 @@ public class Seat extends VehiclePart implements Interactable, Listener {
 
         if (!(e.getDismounted() instanceof Interaction i)) return;
         if (!(e.getEntity() instanceof Player p)) return;
-        if(!i.getUniqueId().equals(getFrame().getInteraction().getUniqueId())) return;
+        if(!i.getUniqueId().equals(getInteraction().getUniqueId())) return;
 
         if (isMounted()) e.setCancelled(true);
 
