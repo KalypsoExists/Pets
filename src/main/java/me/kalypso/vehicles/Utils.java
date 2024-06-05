@@ -2,6 +2,8 @@ package me.kalypso.vehicles;
 
 import org.joml.Quaternionf;
 
+import java.io.File;
+
 public class Utils {
 
     /*public static float[] stringToFloatArray(String[] array) {
@@ -39,6 +41,15 @@ public class Utils {
 
         return new Quaternionf(q1, q2, q3, q0);
 
+    }
+
+    public static String getExtension(File file) {
+        String fn = file.toString();
+        int lt = fn.lastIndexOf('.');
+        if (lt > 0 && lt < fn.length() - 1) {
+            return fn.substring(lt + 1);
+        }
+        return "";
     }
 
 }

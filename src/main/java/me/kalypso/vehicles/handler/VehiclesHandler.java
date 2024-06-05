@@ -1,70 +1,96 @@
 package me.kalypso.vehicles.handler;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import me.kalypso.vehicles.Core;
+import me.kalypso.vehicles.Utils;
+import me.kalypso.vehicles.vehicles.Car;
 import me.kalypso.vehicles.vehicles.Vehicle;
-import org.bukkit.NamespacedKey;
+import org.objectweb.asm.TypeReference;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class VehiclesHandler {
 
-    public static final NamespacedKey key = new NamespacedKey(Core.getInstance(), "vehicle");
+    private final Core core;
+    //private static final ListMultimap<String, Vehicle> vehicles = ArrayListMultimap.create();
+    //private static final Map<String, Class<? extends Vehicle>> vehicleTypes = new HashMap<>();
 
-    private static final Map<UUID, Vehicle> vehicles = new HashMap<>();
-
-    public static void registerVehicle(Vehicle vehicle) {
-        vehicles.put(vehicle.getId(), vehicle);
+    public VehiclesHandler(Core core) {
+        this.core = core;
     }
 
-    public static void unregisterVehicle(Vehicle vehicle) {
-        vehicles.remove(vehicle.getId());
-    }
+    //public static void registerVehicle(String typeIdentifier, Vehicle vehicle) {
+    //    vehicles.put(typeIdentifier, vehicle);
+    //}
 
-    public static void unregisterVehicle(UUID vehicleUUID) {
-        vehicles.remove(vehicleUUID);
-    }
+    //public static void registerType(String typeIdentifier, Class<? extends Vehicle> type) {
+    //    vehicleTypes.put(typeIdentifier, type);
+    //}
 
-    // MAP HANDLING
+    /*public void loadVehicles() {
+        File vehicleFolder = new File(core.getFolder().getAbsolutePath()+File.separator+"vehicles");
+        if(!vehicleFolder.exists()) vehicleFolder.mkdir();
 
-    /*public void addAliveVehicle(Vehicle vehicle) {
-        aliveVehicles.put(vehicle.getId(), vehicle);
-    }
+        List<File> vehicleTypeFolders = new ArrayList<>();
 
-    public void addAliveFrame(Frame frame) {
-        aliveFrames.put(frame.getInteraction().getUniqueId(), frame);
-    }
+        File[] folders = vehicleFolder.listFiles();
+        if(folders == null) {
+            core.getLogger().warning("No vehicles loaded from json.");
+            return;
+        }
+        for(File vehicleTypeFolder : folders) {
+            if(vehicleTypeFolder.isDirectory() && vehicleTypes.containsKey(vehicleTypeFolder.getName())) {
+                vehicleTypeFolders.add(vehicleTypeFolder);
+            }
+        }
 
-    public void addAliveSeat(Seat seat, Vehicle vehicle) {
-        aliveSeatsVehicle.put(seat, vehicle);
-        aliveSeatsInteraction.put(seat.getFrame().getInteraction().getUniqueId(), seat);
-    }
+        if(vehicleTypeFolders.isEmpty()) {
+            core.getLogger().warning("No vehicles loaded from json.");
+            return;
+        }
 
-    public void addRiddenSeat(UUID player, Seat seat) {
-        riddenSeats.put(player, seat);
-    }
+        ObjectMapper mapper = new ObjectMapper();
 
-    public Seat getRiddenSeat(UUID player) {
-        return riddenSeats.get(player);
-    }
+        for(File folder : vehicleTypeFolders) {
+            File[] vehicles = folder.listFiles();
+            if(vehicles == null) continue;
+            for(File file : vehicles) {
+                if(!file.isFile() | !Utils.getExtension(file).equals("json")) return;
+                try {
+                    //Reader reader = new FileReader(file);
+                    //Vehicle vehicle = core.getGson().fromJson(reader, Vehicle.class);
+                    Object list = mapper.readValue(file, vehicleTypes.get(folder.getName()));
+                    vehicleTypes.get("car").new
 
-    public boolean isRidingSeat(UUID player) {
-        return getRiddenSeat(player) != null;
-    }
+                } catch(FileNotFoundException ex) {
+                    core.getLogger().warning("Failed to read file "+file);
+                } catch (StreamReadException e) {
+                    throw new RuntimeException(e);
+                } catch (DatabindException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
 
-    public Vehicle getVehicle(Seat seat) {
-        return aliveSeatsVehicle.get(seat);
-    }
-
-    public Vehicle getVehicleIfDriver(UUID player) {
-        Seat seat = getRiddenSeat(player);
-        if(seat.isDriverSeat()) return getVehicle(seat);
-        return null;
-    }
-
-    public Seat getSeat(UUID uuid) {
-        return aliveSeatsInteraction.get(uuid);
+        try {
+        } catch (SecurityException ex1) {
+            core.getLogger().warning("Security exception upon trying to access vehicles folder");
+        } catch (NullPointerException ex2) {
+            core.getLogger().warning("No vehicles loaded from json");
+        } catch (IOException e) {
+            core.getLogger().warning("No vehicles loaded from json");
+        }
     }*/
 
 }

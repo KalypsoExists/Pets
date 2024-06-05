@@ -1,5 +1,6 @@
 package me.kalypso.vehicles.handler;
 
+import me.kalypso.vehicles.Core;
 import me.kalypso.vehicles.vehicles.parts.Frame;
 import me.kalypso.vehicles.vehicles.parts.Seat;
 import me.kalypso.vehicles.vehicles.RollsRoyce;
@@ -42,13 +43,12 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
 
         if (command.getName().equalsIgnoreCase("vehicles")) {
             if (args[0].equals("spawn")) {
-                Vehicle vehicle = new RollsRoyce().get();
+                Vehicle vehicle = new RollsRoyce(Core.getInstance()).get();
                 vehicle.spawn(p.getWorld(), p.getLocation().add(p.getLocation().getDirection().normalize()));
 
-            } else if (args[0].equals("dismount")) {
+            } /*else if (args[0].equals("dismount")) {
                 Seat seat = VehiclesHandler.getInstance().getSeat(p.getUniqueId());
                 seat.dismountPassenger(p);
-
 
             } else if (args[0].equals("edit")) {
 
@@ -91,7 +91,7 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
                     frame.updateTransformation();
                 }
 
-            }
+            }*/
         }
 
         return true;

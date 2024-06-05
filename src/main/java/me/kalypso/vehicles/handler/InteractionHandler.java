@@ -20,7 +20,7 @@ public class InteractionHandler implements Listener {
     private static final Map<UUID, Interactable> interactables = new HashMap<>();
 
     public InteractionHandler() {
-        Core.registerEvent(this);
+        Core.getInstance().registerEvent(this);
     }
 
     @EventHandler(priority = EventPriority.HIGH)

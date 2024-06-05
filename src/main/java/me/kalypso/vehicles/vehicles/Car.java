@@ -5,6 +5,7 @@ import com.google.common.collect.ListMultimap;
 import me.kalypso.vehicles.Core;
 import me.kalypso.vehicles.vehicles.objects.ControlKey;
 import me.kalypso.vehicles.vehicles.parts.*;
+import org.json.simple.JSONObject;
 
 import java.util.List;
 

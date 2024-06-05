@@ -39,6 +39,7 @@ public abstract class Vehicle extends Identity implements Listener {
         core.registerEvent(this);
     }
 
+
     private void syncControls(List<ControlKey> keys) {
         Bukkit.getScheduler().runTask(core, () -> processControls(keys));
     }
