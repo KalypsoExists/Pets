@@ -2,20 +2,16 @@ package me.kalypso.vehicles;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.google.gson.Gson;
 import lombok.Getter;
 import me.kalypso.vehicles.handler.CommandHandler;
-import me.kalypso.vehicles.handler.RegisteredVehicle;
 import me.kalypso.vehicles.handler.VehiclesHandler;
 import me.kalypso.vehicles.vehicles.Car;
-import me.kalypso.vehicles.vehicles.Vehicle;
+import me.kalypso.vehicles.vehicles.Parachute;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 
 public final class Core extends JavaPlugin {
@@ -26,7 +22,6 @@ public final class Core extends JavaPlugin {
     private ProtocolManager protocolManager;
     @Getter
     private File folder;
-    private final Map<String, RegisteredVehicle<?>> registeredVehicleTypes = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -39,6 +34,9 @@ public final class Core extends JavaPlugin {
         getCommand("vehicles").setExecutor(new CommandHandler());
 
         new VehiclesHandler(this);
+
+        VehiclesHandler.registerVehicle("car", new Car(this, null, null));
+        VehiclesHandler.registerVehicle("parachute", new Parachute(this, null, null));
 
     }
 
@@ -61,10 +59,6 @@ public final class Core extends JavaPlugin {
 
     public void registerEvent(Listener l) {
         getServer().getPluginManager().registerEvents(l, this);
-    }
-
-    public void registerVehicleType(String identifier, RegisteredVehicle<?> vehicleType) {
-        registeredVehicleTypes.put(identifier, vehicleType);
     }
 
 }

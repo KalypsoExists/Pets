@@ -3,10 +3,12 @@ package me.kalypso.vehicles.vehicles;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import me.kalypso.vehicles.Core;
+import me.kalypso.vehicles.handler.VehiclesHandler;
 import me.kalypso.vehicles.vehicles.objects.ControlKey;
 import me.kalypso.vehicles.vehicles.parts.*;
 import org.json.simple.JSONObject;
 
+import java.io.File;
 import java.util.List;
 
 public class Car extends Vehicle {
@@ -18,6 +20,16 @@ public class Car extends Vehicle {
     @Override
     public void processControls(List<ControlKey> keys) {
 
+    }
+
+    @Override
+    public File serialize(Vehicle vehicle) {
+        return null;
+    }
+
+    @Override
+    public Vehicle deserialize(File json) {
+        return null;
     }
 
     public static class Builder {

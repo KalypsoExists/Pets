@@ -19,7 +19,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.json.simple.JSONObject;
 
+import java.io.File;
 import java.util.*;
 
 public abstract class Vehicle extends Identity implements Listener {
@@ -30,7 +32,7 @@ public abstract class Vehicle extends Identity implements Listener {
     private final List<UUID> drivers = new ArrayList<>();
 
     public Vehicle(Core core, String name, Frame chassis) {
-        setName(name);
+        if(name != null) setName(name);
 
         this.core = core;
         this.chassis = chassis;
@@ -118,5 +120,11 @@ public abstract class Vehicle extends Identity implements Listener {
         e.setCancelled(true);
 
     }
+
+    // JSON HANDLING
+
+    public abstract File serialize(Vehicle vehicle);
+
+    public abstract Vehicle deserialize(File json);
 
 }
